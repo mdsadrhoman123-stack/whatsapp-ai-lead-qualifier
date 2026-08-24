@@ -1,0 +1,19 @@
+flowchart TB
+    in(["A lead messages, any hour"])
+    qual["Answered and qualified in conversation"]
+    hot{"Ready to move?"}
+    hand["Yes → broker gets it, slot booked"]
+    warm["Not yet → kept warm, not dropped"]
+    err["A broken step is caught and alerted"]
+
+    in --> qual
+    qual --> hot
+    hot --> hand
+    hot --> warm
+    qual -.-> err
+
+    classDef default fill:#F8F7F3,stroke:#12151B,stroke-width:1px,color:#12151B;
+    classDef ok fill:#2F6B52,stroke:#12151B,stroke-width:1px,color:#F5F4EF;
+    classDef bad fill:#FEE2E2,stroke:#DC2626,stroke-width:1.5px,color:#7F1D1D;
+    class hand ok;
+    class err bad;

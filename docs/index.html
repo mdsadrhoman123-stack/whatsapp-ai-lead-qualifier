@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WhatsApp Lead Qualifier — 24/7 inbound qualification</title>
+<meta name="description" content="Every inbound WhatsApp lead is answered immediately, qualified in conversation, and either handed to an agent with full context or put into a follow-up sequence.">
+<style>
+:root{
+  color-scheme: light;
+  --ink:#12151B; --green:#2F6B52; --cream:#F8F7F3; --red:#DC2626;
+  --redbg:#FEE2E2; --muted:#5B6472; --line:#E3E1DA;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--cream); color:var(--ink);
+  font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:-.01em}
+
+/* ---- hero ---- */
+header.hero{background:var(--ink);color:#F5F4EF;padding:76px 0 68px;
+  border-left:4px solid var(--red)}
+.eyebrow{font-size:11.5px;letter-spacing:3.4px;color:#8A94A3;
+  text-transform:uppercase;margin:0 0 18px}
+header.hero h1{font-size:clamp(38px,6vw,64px);line-height:1.03;margin:0 0 20px}
+header.hero p.promise{font-size:19px;line-height:1.55;color:#C6CFDB;
+  max-width:60ch;margin:0 0 30px}
+.meta{display:flex;flex-wrap:wrap;gap:10px}
+.pill{font-size:12px;letter-spacing:.4px;padding:6px 12px;border-radius:999px;
+  border:1px solid #2E3542;color:#A9B3C1}
+.pill.ok{background:var(--green);border-color:var(--green);color:#F5F4EF}
+
+/* ---- stat strip ---- */
+.stats{background:var(--green);color:#F5F4EF}
+.stats .wrap{display:flex;flex-wrap:wrap;gap:44px;padding:26px 24px}
+.stat b{display:block;font-family:Georgia,serif;font-size:30px;line-height:1.1}
+.stat span{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  color:#C9DCD2}
+
+section{padding:64px 0}
+section h2{font-size:31px;margin:0 0 8px}
+section .lede{color:var(--muted);max-width:64ch;margin:0 0 30px;font-size:16.5px}
+
+/* ---- journey ---- */
+.step{display:grid;grid-template-columns:56px 1fr;gap:20px;padding:20px 0;
+  border-top:1px solid var(--line)}
+.step:last-child{border-bottom:1px solid var(--line)}
+.step .n{font-family:Georgia,serif;font-size:20px;color:var(--green);
+  padding-top:2px}
+.step b{display:block;margin-bottom:3px;font-size:16.5px}
+.step p{margin:0;color:var(--muted)}
+
+/* ---- diagram ---- */
+.diagram{background:#fff;border:1px solid var(--line);border-radius:4px;
+  padding:26px;overflow-x:auto}
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;
+  margin:0 0 20px}
+button.act{font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+  padding:11px 20px;border-radius:3px;border:1px solid var(--ink);
+  background:var(--ink);color:#F5F4EF;transition:.14s}
+button.act:hover{transform:translateY(-1px)}
+button.act[aria-pressed="true"]{background:var(--red);border-color:var(--red)}
+button.ghost{background:transparent;color:var(--ink)}
+.hint{font-size:13.5px;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:0;align-items:stretch}
+.node{position:relative;min-width:132px;max-width:172px;padding:13px 14px;
+  border:1px solid var(--ink);background:var(--cream);font-size:13.5px;
+  line-height:1.35;transition:.22s;border-radius:3px;margin:0 22px 18px 0}
+.node:after{content:"";position:absolute;right:-22px;top:50%;width:22px;
+  height:1px;background:#B9B6AD}
+.node:last-child:after{display:none}
+.node .kind{display:block;font-size:9.5px;letter-spacing:1.4px;
+  text-transform:uppercase;color:#8A8578;margin-bottom:5px}
+.node.k-success{background:var(--green);border-color:var(--green);color:#F5F4EF}
+.node.k-success .kind{color:#BFD8CB}
+.node.k-fail{background:var(--redbg);border-color:var(--red);color:#7F1D1D;
+  border-width:1.5px}
+.node.k-fail .kind{color:#B4433F}
+.node.k-logic{transform:none;border-style:dashed}
+.node.k-human{border-left:4px solid var(--ink)}
+body.broken .node{opacity:.28;filter:grayscale(1)}
+body.broken .node.k-fail{opacity:1;filter:none;
+  box-shadow:0 0 0 4px rgba(220,38,38,.16)}
+body.broken .node.k-logic{opacity:.85;filter:none}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:22px;
+  padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;
+  color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;margin-right:6px;
+  vertical-align:-1px;border:1px solid var(--ink)}
+.legend .g{background:var(--green);border-color:var(--green)}
+.legend .r{background:var(--redbg);border-color:var(--red)}
+.legend .c{background:var(--cream)}
+
+/* ---- failure section: the loudest thing on the page ---- */
+.failure{background:var(--ink);color:#E8E6E0}
+.failure h2{color:#F5F4EF}
+.failure .lede{color:#A9B3C1}
+.failure .eyebrow{color:var(--red)}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+.failure th{text-align:left;font-size:10.5px;letter-spacing:1.5px;
+  text-transform:uppercase;color:#8A94A3;padding:0 14px 12px;font-weight:600;
+  border-bottom:1px solid #2B313C}
+.failure td{padding:14px;border-bottom:1px solid #1E242E;vertical-align:top}
+.failure td.what{border-left:3px solid var(--red);font-weight:600;color:#F5F4EF}
+.rule{margin-top:34px;padding-top:26px;border-top:1px solid #2B313C;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:26px}
+.rule div b{display:block;color:#F5F4EF;margin-bottom:5px;font-size:15px}
+.rule div p{margin:0;color:#94A0B0;font-size:14px}
+
+/* ---- cta ---- */
+footer{background:var(--cream);border-top:1px solid var(--line);
+  padding:64px 0 76px}
+footer h2{font-size:28px;margin:0 0 12px;max-width:22ch}
+footer p{color:var(--muted);max-width:56ch}
+footer .sig{margin-top:30px;padding-top:22px;border-top:1px solid var(--line);
+  font-size:14px}
+footer .sig b{font-size:15px}
+a{color:var(--green)}
+@media(max-width:640px){
+  .step{grid-template-columns:36px 1fr;gap:12px}
+  .stats .wrap{gap:26px}
+  .node{min-width:120px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">24/7 inbound qualification</p>
+    <h1>WhatsApp Lead Qualifier</h1>
+    <p class="promise">Every inbound WhatsApp lead is answered immediately, qualified in conversation, and either handed to an agent with full context or put into a follow-up sequence.</p>
+    <div class="meta">
+      <span class="pill ok">production · v4.0</span>
+      <span class="pill">Real estate</span>
+      <span class="pill">Built for Real estate brokers</span>
+    </div>
+  </div>
+</header>
+
+<div class="stats"><div class="wrap" id="stats"></div></div>
+
+<section>
+  <div class="wrap">
+    <h2>What actually happens</h2>
+    <p class="lede">The same system, told from the client's side. No jargon,
+    no node names — just the sequence of things that occur.</p>
+    <div id="journey"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How it flows</h2>
+    <p class="lede">What happens to the client's work, in the order they
+    experience it — not the internal build, which is not published. Then press
+    <b>Break it</b> — the failure paths stay lit and everything else fades.
+    That is the half of the system most portfolios never show you.</p>
+    <div class="controls">
+      <button class="act" id="brk" aria-pressed="false">Break it</button>
+      <span class="hint" id="hint">Currently showing the happy path.</span>
+    </div>
+    <div class="diagram">
+      <div class="flow" id="flow"></div>
+      <div class="legend">
+        <span><i class="c"></i>A step the system takes</span>
+        <span><i class="c" style="border-style:dashed"></i>A decision point</span>
+        <span><i class="c" style="border-left:4px solid #12151B"></i>A person acts</span>
+        <span><i class="g"></i>Good outcome</span>
+        <span><i class="r"></i>Failure path — held, escalated, alerted</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="failure">
+  <div class="wrap">
+    <p class="eyebrow">The half nobody publishes</p>
+    <h2>When it breaks</h2>
+    <p class="lede">Anything can be made to work on a good day. This table is
+    what happens on a bad one.</p>
+    <table>
+      <thead><tr><th>What goes wrong</th><th>How it is detected</th>
+      <th>What the system does</th><th>Who finds out</th></tr></thead>
+      <tbody id="fails"></tbody>
+    </table>
+    <div class="rule">
+      <div><b>Fail closed, not open</b><p>When the system cannot establish that
+      an action is safe, it holds. A held item is a visible problem. An item
+      processed on a guess is an invisible one.</p></div>
+      <div><b>Nothing disappears</b><p>Anything that cannot be completed is
+      recorded where a human can find it, not dropped from the run.</p></div>
+      <div><b>Silence is a fault</b><p>An empty result where results were
+      expected is treated as a possible failure of the source — not as an
+      absence of work.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h2>If a process in your business depends on someone noticing when it
+    breaks</h2>
+    <p>That is the problem I work on. Tell me what the process is and I will
+    tell you honestly whether automating it is worth your money.</p>
+    <div class="sig">
+      <b>K MD SAYAD RAHMAN</b> — AI Automation Engineer<br>
+      n8n · AI agents · production reliability<br>
+      <a href="https://www.linkedin.com/in/khandokarsayad">LinkedIn</a> ·
+      <a href="https://github.com/mdsadrhoman123-stack">More systems</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+var DATA = {"nodes": [{"id": "in", "label": "A lead messages, any hour", "kind": "trigger"}, {"id": "qual", "label": "Answered and qualified in conversation", "kind": "step"}, {"id": "hot", "label": "Ready to move?", "kind": "logic"}, {"id": "hand", "label": "Yes → broker gets it, slot booked", "kind": "success"}, {"id": "warm", "label": "Not yet → kept warm, not dropped", "kind": "step"}, {"id": "err", "label": "A broken step is caught and alerted", "kind": "fail"}], "edges": [{"a": "in", "b": "qual"}, {"a": "qual", "b": "hot"}, {"a": "hot", "b": "hand"}, {"a": "hot", "b": "warm"}, {"a": "qual", "b": "err"}], "fails": [{"what": "Unverified inbound request", "detect": "Meta webhook signature check", "does": "Rejected before any processing", "who": "Logged, no alert needed"}, {"what": "Same message delivered twice", "detect": "Redis deduplication", "does": "Second copy dropped — the lead is not answered twice", "who": "Nobody — by design"}, {"what": "Message arrives outside business hours", "detect": "Business-hours branch", "does": "Answered and qualified anyway, agent handoff deferred", "who": "Broker sees it in the morning with context"}, {"what": "AI provider call fails", "detect": "API error", "does": "Error logged, alert fired on the live channel — the lead is not silently dropped", "who": "Immediate alert"}, {"what": "Calendar booking fails", "detect": "API error", "does": "Broker still alerted with the conversation, booking flagged", "who": "Alert names the failed booking"}, {"what": "Lead goes quiet after qualifying", "detect": "No reply in the window", "does": "Enters the follow-up sequence rather than being closed", "who": "Nobody — handled"}, {"what": "Anything unanticipated", "detect": "Error handling on every critical path", "does": "Halt that path, keep the conversation state", "who": "Live alert channel"}], "journey": [{"h": "A lead messages", "b": "On WhatsApp, at any hour, with no form to fill in."}, {"h": "The request is verified", "b": "Signature-checked before anything runs, and deduplicated so one message means one conversation."}, {"h": "Someone answers immediately", "b": "The agent holds context across the whole conversation, so the lead is not repeating themselves."}, {"h": "The clock is respected", "b": "Inside hours a live agent takes over. Outside hours the lead is still qualified, not parked."}, {"h": "A hot lead reaches the broker", "b": "With the full conversation and a calendar slot already booked — not a notification to go and read something."}, {"h": "A cold lead is kept", "b": "A three-day follow-up sequence, because not-now is not the same as no."}, {"h": "A broken step is visible", "b": "Every critical path logs errors to a live alert channel. This is the part that keeps the zero honest."}], "name": "WhatsApp Lead Qualifier", "eyebrow": "24/7 inbound qualification", "promise": "Every inbound WhatsApp lead is answered immediately, qualified in conversation, and either handed to an agent with full context or put into a follow-up sequence.", "client": "Real estate brokers", "status": "production · v4.0", "metrics": [["Production version", "v4.0"], ["Coverage", "24/7"], ["Missed leads", "0"]]};
+
+var flow = document.getElementById('flow');
+DATA.nodes.forEach(function(n, i){
+  var d = document.createElement('div');
+  d.className = 'node k-' + n.kind;
+  var k = document.createElement('span');
+  k.className = 'kind';
+  k.textContent = (i + 1 < 10 ? '0' : '') + (i + 1);
+  var t = document.createElement('span'); t.textContent = n.label;
+  d.appendChild(k); d.appendChild(t);
+  flow.appendChild(d);
+});
+
+var j = document.getElementById('journey');
+DATA.journey.forEach(function(s, i){
+  var w = document.createElement('div'); w.className = 'step';
+  var n = document.createElement('div'); n.className = 'n';
+  n.textContent = (i+1 < 10 ? '0' : '') + (i+1);
+  var c = document.createElement('div');
+  var b = document.createElement('b'); b.textContent = s.h;
+  var pp = document.createElement('p'); pp.textContent = s.b;
+  c.appendChild(b); c.appendChild(pp);
+  w.appendChild(n); w.appendChild(c); j.appendChild(w);
+});
+
+var tb = document.getElementById('fails');
+DATA.fails.forEach(function(f){
+  var tr = document.createElement('tr');
+  [['what', f.what], ['', f.detect], ['', f.does], ['', f.who]]
+    .forEach(function(cell){
+      var td = document.createElement('td');
+      if (cell[0]) td.className = cell[0];
+      td.textContent = cell[1]; tr.appendChild(td);
+    });
+  tb.appendChild(tr);
+});
+
+var st = document.getElementById('stats');
+DATA.metrics.forEach(function(m){
+  var d = document.createElement('div'); d.className = 'stat';
+  var b = document.createElement('b'); b.textContent = m[1];
+  var s = document.createElement('span'); s.textContent = m[0];
+  d.appendChild(b); d.appendChild(s); st.appendChild(d);
+});
+
+var btn = document.getElementById('brk');
+var hint = document.getElementById('hint');
+btn.addEventListener('click', function(){
+  var broken = document.body.classList.toggle('broken');
+  btn.setAttribute('aria-pressed', String(broken));
+  btn.textContent = broken ? 'Put it back' : 'Break it';
+  hint.textContent = broken
+    ? 'Lit in red: every path the system takes when something goes wrong. None of them are silent.'
+    : 'Currently showing the happy path.';
+});
+</script>
+</body>
+</html>

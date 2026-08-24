@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="128"
+     viewBox="0 0 1280 128" role="img"
+     aria-label="If a process depends on someone noticing when it breaks, that is the problem I work on.">
+  <rect width="1280" height="128" fill="#12151B"/>
+  <rect x="0" y="0" width="4" height="128" fill="#DC2626"/>
+  <rect x="1274" y="0" width="6" height="128" fill="#2F6B52"/>
+  <text x="48" y="52" font-family="Georgia,serif" font-size="24"
+        fill="#F5F4EF">If a process depends on someone noticing when it breaks —</text>
+  <text x="48" y="86" font-family="Georgia,serif" font-size="24"
+        fill="#7FB39A">that is the problem I work on.</text>
+  <text x="1216" y="76" text-anchor="end"
+        font-family="Helvetica,Arial,sans-serif" font-size="11.5"
+        letter-spacing="1.5" fill="#8A94A3">K MD SAYAD RAHMAN</text>
+</svg>

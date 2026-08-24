@@ -1,0 +1,66 @@
+# ---------------------------------------------------------------
+# The build is not published. This is the mechanical half of that
+# rule — a workflow export cannot be committed here by accident,
+# not even at 2am, not even with `git add .`.
+#
+# A leak is not undone by a later commit: git history keeps the file
+# and GitHub keeps the fork. So the guard has to be in front.
+# ---------------------------------------------------------------
+workflows/*.json
+workflows/**/*.json
+*.workflow.json
+*_workflow.json
+*n8n*.json
+*N8N*.json
+*.n8n.json
+export.json
+*-export.json
+flow.json
+flows.json
+
+# workflow exports in any other wrapper
+*.workflow.yaml
+*.workflow.yml
+workflows/*.zip
+workflows/*.tar.gz
+workflows/*.png
+workflows/*.jpg
+workflows/*.jpeg
+workflows/*.webp
+workflows/*.gif
+workflows/*.mp4
+workflows/*.mov
+
+# canvas screenshots anywhere — a screenshot of the graph is the graph
+*canvas*.png
+*workflow*.png
+*workflow*.jpg
+*n8n*.png
+
+# the allowed exception: this file explains why the folder is empty
+!workflows/README.md
+
+# credentials — never
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+secrets.*
+
+# n8n local
+.n8n/
+*.credentials.json
+
+# python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# node
+node_modules/
+
+# os
+.DS_Store
+Thumbs.db

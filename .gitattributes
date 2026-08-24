@@ -1,0 +1,9 @@
+# GitHub Linguist: this is an automation repository, not a web project.
+# Documentation and demo assets must not dominate the language bar.
+*.html    linguist-documentation
+*.svg     linguist-documentation
+*.css     linguist-documentation
+docs/*    linguist-documentation
+assets/*  linguist-documentation
+*.mmd     linguist-documentation
+*.md      linguist-documentation

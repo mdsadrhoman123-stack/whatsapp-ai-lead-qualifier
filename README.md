@@ -191,5 +191,5 @@ I will tell you honestly whether automating it is worth your money — including
 
 **K MD SAYAD RAHMAN** — AI Automation Engineer  
 n8n · AI agents · production reliability  
-[LinkedIn](https://www.linkedin.com/in/khandokarsayad) · [More systems](https://github.com/mdsadrhoman123-stack)
+[khandokarsayad@gmail.com](mailto:khandokarsayad@gmail.com) · [mdsadrhoman123@gmail.com](mailto:mdsadrhoman123@gmail.com) · [LinkedIn](https://www.linkedin.com/in/khandokarsayad) · [More systems](https://github.com/mdsadrhoman123-stack)
 

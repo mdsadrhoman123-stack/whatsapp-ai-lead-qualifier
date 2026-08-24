@@ -42,4 +42,4 @@ Ask. On a call I will happily open the real thing and walk through the design
 decisions, the parts that failed first, and why the failure paths look the way
 they do. That conversation is more useful than a JSON file anyway.
 
-**K MD SAYAD RAHMAN** — [LinkedIn](https://www.linkedin.com/in/khandokarsayad)
+**K MD SAYAD RAHMAN** — [khandokarsayad@gmail.com](mailto:khandokarsayad@gmail.com) · [LinkedIn](https://www.linkedin.com/in/khandokarsayad)

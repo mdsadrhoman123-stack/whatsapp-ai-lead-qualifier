@@ -37,4 +37,4 @@ and it comes down first and gets discussed second.
 ---
 
 **K MD SAYAD RAHMAN** — AI Automation Engineer
-[LinkedIn](https://www.linkedin.com/in/khandokarsayad)
+[khandokarsayad@gmail.com](mailto:khandokarsayad@gmail.com) · [mdsadrhoman123@gmail.com](mailto:mdsadrhoman123@gmail.com) · [LinkedIn](https://www.linkedin.com/in/khandokarsayad)

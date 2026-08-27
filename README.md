@@ -4,14 +4,21 @@
 
 **Every inbound WhatsApp lead is answered immediately, qualified in conversation, and either handed to an agent with full context or put into a follow-up sequence.**
 
-![production · v4.0](https://img.shields.io/badge/status-delivered%20to%20client-2F6B52?style=flat-square) ![sector](https://img.shields.io/badge/sector-Real%20estate-12151B?style=flat-square) ![built with](https://img.shields.io/badge/built%20with-n8n-12151B?style=flat-square) ![Production version](https://img.shields.io/badge/Production%20version-v4.0-5B6472?style=flat-square)
+![running on my own n8n](https://img.shields.io/badge/status-running%20on%20my%20own%20n8n-2F6B52?style=flat-square) ![availability](https://img.shields.io/badge/availability-ready%20to%20deploy-5B6472?style=flat-square) ![sector](https://img.shields.io/badge/sector-Real%20estate-12151B?style=flat-square) ![built with](https://img.shields.io/badge/built%20with-n8n-12151B?style=flat-square) ![Production version](https://img.shields.io/badge/Production%20version-v4.0-5B6472?style=flat-square)
+
+> [!NOTE]
+> **Where this system comes from.** Businesses in this sector post this problem publicly, in their own words — job briefs on Upwork and Fiverr. I took the brief as the specification, designed a system for the problem exactly as stated, and built it to production standard on my own infrastructure. Nothing in it was added to look impressive: every part of it answers something in the brief.
+>
+> It was built as a product rather than a one-off — built once, ready to deploy for any business with this problem. **It has not been sold or deployed into a customer's business: it is available, not delivered.** What follows is the real system — how it works, how it fails, and what it does not do.
 
 | | |
 | :--- | :--- |
 | **Built for** | Real estate brokers |
+| **The brief** | Real briefs, posted publicly — businesses in this sector describing this exact problem in their own words, on Upwork and Fiverr |
 | **Industry** | Real estate |
-| **Status** | production · v4.0 |
-| **Role** | Designed, built and deployed end to end |
+| **Status** | running on my own n8n |
+| **My role** | Sole engineer — I read the brief, scoped it, designed the system, built it and ran it |
+| **Availability** | Ready to deploy — built to production standard and running on my own infrastructure. Not sold, and not running inside a customer's business. |
 
 ---
 
@@ -109,7 +116,7 @@ flowchart LR
 Red appears in exactly one role across every repo in this portfolio: where failure goes. Nowhere else. If you see red, something is being held, escalated or alerted.
 </details>
 
-> **Walk it interactively** — [open the demo](https://mdsadrhoman123-stack.github.io/whatsapp-ai-lead-qualifier/) and press **Break it** to watch the failure path light up. Source: [`docs/index.html`](docs/index.html)
+> **Walk it interactively** — [`docs/index.html`](docs/index.html) is a single self-contained page. Download it, open it in any browser, and press **Break it** to watch the failure path light up. Nothing to install, no network calls.
 
 ## When it breaks
 
@@ -161,20 +168,20 @@ Every design decision costs something. These are the trade-offs in this build, s
 
 ## What is not in this repo
 
-- **Client data.** None, in any form. Not anonymised, not sampled.
+- **Data belonging to a real business.** None, in any form. Not anonymised, not sampled — there never was any.
 - **Credentials and endpoints.** Never committed. See [`NOTICE.md`](NOTICE.md).
-- **The workflow itself.** No exports, no node graph, no execution order, no prompts, no scoring thresholds, no integration wiring — not sanitised, not partial, not in a screenshot. That is the build, and the build belongs to the engagement that paid for it.
+- **The workflow itself.** No exports, no node graph, no execution order, no prompts, no scoring thresholds, no integration wiring — not sanitised, not partial, not in a screenshot. That is the build, and the build is not portfolio material.
 
 This repository documents *how the problem was thought about* — the failure paths, the trade-offs, the reasoning. That is what tells you whether to hire someone. A copy of the wiring would not.
 
-This is a portfolio repository documenting delivered work. It is not a product you can clone and run against your own accounts.
+This is a portfolio repository documenting a system I designed and built. It is not a product you can clone and run against your own accounts.
 
 ## Read deeper
 
 | | |
 | :--- | :--- |
 | [01 · The problem](docs/01-problem.md) | The situation before, in full |
-| [02 · The client journey](docs/02-journey.md) | Step by step, from their side |
+| [02 · The journey](docs/02-journey.md) | Step by step, from their side |
 | [03 · Architecture](docs/03-architecture.md) | Diagrams and the reasoning |
 | [04 · Failure handling](docs/04-failure-handling.md) | Every path, and where it lands |
 | [05 · The stack](docs/05-stack.md) | What was chosen and what was rejected |

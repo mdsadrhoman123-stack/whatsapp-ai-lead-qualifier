@@ -1,6 +1,6 @@
 # 01 · The problem
 
-**WhatsApp Lead Qualifier** — Real estate brokers
+**WhatsApp Lead Qualifier** — the problem, as Real estate brokers describe it
 
 ---
 
@@ -20,4 +20,4 @@ Every inbound message is signature-verified, deduplicated, and answered by an ag
 
 ---
 
-[← README](../README.md) · [02 · The client journey →](02-journey.md)
+[← README](../README.md) · [02 · The journey →](02-journey.md)

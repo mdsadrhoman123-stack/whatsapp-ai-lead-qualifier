@@ -1,4 +1,4 @@
-# 02 · The client journey
+# 02 · The journey
 
 What this looks like from the outside, for **Real estate brokers**.
 

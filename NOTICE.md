@@ -2,25 +2,29 @@
 
 ## What this repository is
 
-Documentation of a delivered automation system, published as portfolio work by
-K MD SAYAD RAHMAN (AI Automation Engineer).
+Documentation of an automation system I designed and built myself, published as
+portfolio work by K MD SAYAD RAHMAN (AI Automation Engineer).
 
 It is **not** a runnable product. It is not intended to be cloned and pointed at
 your own accounts.
 
+## Provenance
+
+The brief behind this system is real: businesses in this sector post this exact
+problem publicly, in their own words. The system is real too — I designed it,
+built it to production standard, and it runs on my own infrastructure. It was
+built as a product, ready to deploy for any business with this problem.
+
+**It has not been sold or deployed into a customer's business: it is available,
+not delivered.**
+
 ## What is not here, and will not be
 
-- **Client data.** None, in any form — not anonymised, not sampled, not a
-  redacted screenshot.
+- **Data belonging to a real business.** None, in any form — not anonymised,
+  not sampled, not a redacted screenshot. There never was any.
 - **Credentials, tokens, webhook secrets, API keys.** Never committed.
-- **Client-identifying detail** beyond what the client has agreed may be shared.
+- **Anything that would identify the business behind the brief.**
 - **Internal endpoints or hostnames.**
-
-## Client confidentiality
-
-This system was built for Real estate brokers. Anything that would identify the
-client, their customers or their commercial terms is excluded unless written
-permission is on file.
 
 ## If you are reviewing this as a prospective client
 

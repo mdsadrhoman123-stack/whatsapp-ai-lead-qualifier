@@ -7,16 +7,15 @@ one, not a partial one, not a screenshot of the canvas.
 
 ## Why
 
-The build is the deliverable. A client pays for the node graph, the execution
-order, the prompts, the retry logic and the thresholds that took the iterations
-to get right. Publishing that — even with the credentials stripped out — hands
-it to anyone who wants it, including the next person bidding against me for
-similar work. It would also mean the client who funded it paid for something
-that is now free.
+The build is the deliverable. The node graph, the execution order, the prompts,
+the retry logic and the thresholds are what took the iterations to get right,
+and they are the part a client would actually be paying for. Publishing them —
+even with the credentials stripped out — hands the work to anyone who wants it,
+including the next person bidding against me for the same job.
 
 So the rule is simple, and it applies to every repository in this portfolio:
-**what a client paid me to build is not published.** If I would not publish
-yours, I will not publish theirs.
+**the build is not published.** If I would not publish yours, I do not publish
+my own either.
 
 ## What is published instead
 

@@ -3,9 +3,9 @@ All rights reserved.
 
 WHAT THIS REPOSITORY IS
 
-A portfolio record. It documents how a delivered automation system was
-designed, what it was built to prevent, and how it behaves when something
-fails. It is written to be read.
+A portfolio record. It documents how an automation system was designed, what it
+was built to prevent, and how it behaves when something fails. It is written to
+be read.
 
 WHAT YOU MAY DO
 
@@ -18,10 +18,11 @@ Copying, reproducing, republishing, modifying or redistributing the contents
 of this repository in whole or in substantial part, or presenting this work
 as your own.
 
-The systems described here were built for paying clients. The
+The systems described here were designed and built in full by the copyright
+holder, to briefs that real businesses published in their own words. The
 implementations — the workflow graphs, the execution order, the prompts, the
-thresholds and the integration wiring — are not published here, and remain
-with the engagements that commissioned them.
+thresholds and the integration wiring — are not published here and are not
+licensed to anyone.
 
 ANYTHING ELSE
 

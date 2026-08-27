@@ -8,7 +8,7 @@
 
 This is the client's-eye view: what happens to their work, in the order they experience it. It is deliberately not the build.
 
-The internal node graph, the execution order, the prompts, the scoring thresholds and the integration wiring are not published here and will not be. That is not evasiveness — it is the same discretion the next client's system gets. What is published is enough to judge whether the thinking is sound.
+The internal node graph, the execution order, the prompts, the scoring thresholds and the integration wiring are not published here and will not be. That is not evasiveness — it is the same discretion a client's own system would get. What is published is enough to judge whether the thinking is sound.
 
 ## The flow, left to right
 
@@ -77,4 +77,4 @@ The red blocks above are not exceptions bolted on afterwards. They were drawn fi
 
 ---
 
-[← 02 · The client journey](02-journey.md) · [04 · Failure handling →](04-failure-handling.md)
+[← 02 · The journey](02-journey.md) · [04 · Failure handling →](04-failure-handling.md)

@@ -23,7 +23,7 @@
 
 ### On this page
 
-[The problem](#the-problem) · [What changed](#what-changed) · [How it works](#how-it-works) · [When it breaks](#when-it-breaks) · [The stack](#the-stack) · [Limitations](#honest-limitations) · [Read deeper](#read-deeper)
+[The problem](#the-problem) · [What changed](#what-changed) · [How it works](#how-it-works) · [When it breaks](#when-it-breaks) · [The stack](#the-stack) · [Limitations](#honest-limitations) · [What is here](#what-is-in-this-repository) · [Read deeper](#read-deeper)
 
 ---
 
@@ -165,10 +165,46 @@ Every design decision costs something. These are the trade-offs in this build, s
 - Booking assumes a maintained calendar with real availability. A stale calendar books a slot nobody is free for.
 - Single WhatsApp number per deployment. More numbers means more instances, not more configuration.
 
+## What is in this repository
+
+```text
+whatsapp-ai-lead-qualifier/
+├── README.md                      ← you are here
+├── SECURITY.md                    # how to report something that should not be public
+├── NOTICE.md                      # what is withheld, and why
+├── LICENSE                        # covers the documentation, not a software grant
+│
+├── docs/
+│   ├── index.html                 # the interactive demo — one file, opens with no network
+│   ├── 01-problem.md              # the situation before, in full
+│   ├── 02-journey.md              # step by step, from their side
+│   ├── 03-architecture.md         # the diagrams and the reasoning
+│   ├── 04-failure-handling.md     # every failure path, and where it lands
+│   ├── 05-stack.md                # what was chosen, and what was rejected
+│   ├── 06-results.md              # what is measured, and what is not
+│   └── 07-limitations.md          # the trade-offs, in detail
+│
+├── diagrams/
+│   ├── pipeline-lr.mmd            # the client-level flow, left to right
+│   └── pipeline-tb.mmd            # the same flow, top to bottom
+│
+├── assets/                        # banner and closing card, SVG, no CDN
+│
+├── workflows/
+│   └── README.md                  # empty on purpose — see below
+│
+└── .github/
+    ├── honesty-check.py           # the claim linter behind the badge
+    └── workflows/
+        └── honesty-check.yml      # runs it on every push
+```
+
+There is no `src/` in that tree, and no `workflows/*.json`. That is not an omission — it is the design, and the next section says exactly what is being withheld and why.
+
 ## What is not in this repo
 
 - **Data belonging to a real business.** None, in any form. Not anonymised, not sampled — there never was any.
-- **Credentials and endpoints.** Never committed. See [`NOTICE.md`](NOTICE.md).
+- **Credentials and endpoints.** Never committed. See [`NOTICE.md`](NOTICE.md) for what is withheld, and [`SECURITY.md`](SECURITY.md) for how to report anything that slipped through.
 - **The workflow itself.** No exports, no node graph, no execution order, no prompts, no scoring thresholds, no integration wiring — not sanitised, not partial, not in a screenshot. That is the build, and the build is not portfolio material.
 
 This repository documents *how the problem was thought about* — the failure paths, the trade-offs, the reasoning. That is what tells you whether to hire someone. A copy of the wiring would not.

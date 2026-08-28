@@ -10,13 +10,14 @@ your own accounts.
 
 ## Provenance
 
-The brief behind this system is real: businesses in this sector post this exact
-problem publicly, in their own words. The system is real too — I designed it,
-built it to production standard, and it runs on my own infrastructure. It was
-built as a product, ready to deploy for any business with this problem.
+Businesses in this sector post this exact problem publicly, in their own words.
+I took one of those briefs as the specification and built the system it asks
+for — to production standard, with the failure paths designed before the
+features. I designed and built all of it, and it runs on my own infrastructure.
 
-**It has not been sold or deployed into a customer's business: it is available,
-not delivered.**
+It was built once as a product rather than as a one-off, so it is ready to
+deploy for any business with this problem. It has not been sold or deployed into
+a customer's business yet.
 
 ## What is not here, and will not be
 

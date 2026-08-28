@@ -1,0 +1,24 @@
+# Runs .github/honesty-check.py against this repository's own text on every push.
+#
+# What it catches: a claim of a client engagement that did not happen, a
+# percentage or multiplier with no stated measurement method, a missing
+# availability disclosure, an external dependency sneaking into the demo, or a
+# workflow export committed by accident.
+name: honesty check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check claims, numbers and disclosure
+        run: python3 .github/honesty-check.py

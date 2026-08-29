@@ -60,9 +60,27 @@ section .lede{color:var(--muted);max-width:64ch;margin:0 0 30px;font-size:16.5px
 .step b{display:block;margin-bottom:3px;font-size:16.5px}
 .step p{margin:0;color:var(--muted)}
 
-/* ---- diagram ---- */
-.diagram{background:#fff;border:1px solid var(--line);border-radius:4px;
-  padding:26px;overflow-x:auto}
+/* ---- the canvas ---- */
+/* Drawn the way an automation editor draws a workflow: dark canvas, dotted
+   grid, tiles with ports, connectors between them. That is deliberate. A client
+   who has ever watched an automation being built recognises this surface
+   immediately, and recognition is most of what makes a portfolio feel like real
+   work rather than a description of work.
+   What is *on* the canvas has not changed: the same client-facing steps the
+   README publishes. The real graph — which node runs after which, and on what
+   condition — is not here and is not going to be. The look is the tool's shared
+   visual language, which is not a secret. The wiring is. */
+.diagram{background:#0E1014;border:1px solid #23282F;border-radius:8px;
+  padding:0;overflow:hidden}
+.canvasbar{display:flex;align-items:center;gap:9px;padding:11px 17px;
+  background:#14181E;border-bottom:1px solid #23282F;font-size:12px;
+  color:#7C8797}
+.canvasbar i{width:9px;height:9px;border-radius:50%;background:#2E3540;
+  display:inline-block;flex:0 0 auto}
+.canvasbar b{color:#AEB9C7;font-weight:600}
+.canvas{padding:32px 26px 20px;overflow-x:auto;
+  background-image:radial-gradient(#1E242C 1.1px,transparent 1.1px);
+  background-size:22px 22px;background-position:-11px -11px}
 .controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;
   margin:0 0 20px}
 button.act{font:inherit;font-size:14px;font-weight:600;cursor:pointer;
@@ -72,34 +90,63 @@ button.act:hover{transform:translateY(-1px)}
 button.act[aria-pressed="true"]{background:var(--red);border-color:var(--red)}
 button.ghost{background:transparent;color:var(--ink)}
 .hint{font-size:13.5px;color:var(--muted)}
-.flow{display:flex;flex-wrap:wrap;gap:0;align-items:stretch}
-.node{position:relative;min-width:132px;max-width:172px;padding:13px 14px;
-  border:1px solid var(--ink);background:var(--cream);font-size:13.5px;
-  line-height:1.35;transition:.22s;border-radius:3px;margin:0 22px 18px 0}
-.node:after{content:"";position:absolute;right:-22px;top:50%;width:22px;
-  height:1px;background:#B9B6AD}
-.node:last-child:after{display:none}
-.node .kind{display:block;font-size:9.5px;letter-spacing:1.4px;
-  text-transform:uppercase;color:#8A8578;margin-bottom:5px}
-.node.k-success{background:var(--green);border-color:var(--green);color:#F5F4EF}
-.node.k-success .kind{color:#BFD8CB}
-.node.k-fail{background:var(--redbg);border-color:var(--red);color:#7F1D1D;
-  border-width:1.5px}
-.node.k-fail .kind{color:#B4433F}
-.node.k-logic{transform:none;border-style:dashed}
-.node.k-human{border-left:4px solid var(--ink)}
-body.broken .node{opacity:.28;filter:grayscale(1)}
-body.broken .node.k-fail{opacity:1;filter:none;
-  box-shadow:0 0 0 4px rgba(220,38,38,.16)}
-body.broken .node.k-logic{opacity:.85;filter:none}
-.legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:22px;
-  padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;
-  color:var(--muted)}
-.legend i{display:inline-block;width:11px;height:11px;margin-right:6px;
-  vertical-align:-1px;border:1px solid var(--ink)}
-.legend .g{background:var(--green);border-color:var(--green)}
-.legend .r{background:var(--redbg);border-color:var(--red)}
-.legend .c{background:var(--cream)}
+.flow{display:flex;flex-wrap:wrap;gap:0;align-items:flex-start}
+.node{position:relative;width:116px;margin:0 34px 26px 0;text-align:center;
+  transition:.22s}
+.node .tile{position:relative;width:76px;height:76px;margin:0 auto 11px;
+  border-radius:15px;background:#1B2028;border:1.5px solid #333B47;
+  display:flex;align-items:center;justify-content:center;transition:.22s}
+.node .tile svg{width:30px;height:30px;stroke:currentColor;fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* the two ports every node in an editor like this has */
+.node .tile:before,.node .tile:after{content:"";position:absolute;width:7px;
+  height:7px;border-radius:50%;background:#39414E;top:50%;margin-top:-3.5px}
+.node .tile:before{left:-4.5px}
+.node .tile:after{right:-4.5px}
+.node:first-child .tile:before{display:none}
+.node .wire{position:absolute;left:96px;top:38px;width:38px;height:1.5px;
+  background:#333B47;transition:.22s}
+.node .wire:after{content:"";position:absolute;right:-1px;top:-3.2px;
+  border-left:6px solid #333B47;border-top:4px solid transparent;
+  border-bottom:4px solid transparent}
+.node:last-child .wire{display:none}
+.node .kind{display:block;font-size:9.5px;letter-spacing:1.5px;
+  text-transform:uppercase;color:#5D6877;margin:0 0 4px}
+.node .lbl{display:block;font-size:12.5px;line-height:1.34;color:#C2CBD6}
+.node.k-trigger .tile svg{color:#E0A84B}
+.node.k-step    .tile svg{color:#6E8EF2}
+.node.k-logic   .tile svg{color:#A98BF0}
+.node.k-human   .tile svg{color:#4FB3A6}
+.node.k-success .tile svg{color:#7EDCA0}
+.node.k-fail    .tile svg{color:#E2544C}
+.node.k-logic   .tile{border-style:dashed}
+.node.k-success .tile{border-color:#47A06B;background:#16281D}
+.node.k-fail    .tile{border-color:#8C3B34;background:#281410}
+/* Break it: the failure paths are the only thing left with the lights on. */
+body.broken .node{opacity:.2;filter:grayscale(1)}
+body.broken .node .wire,body.broken .node .wire:after{background:#2A303A}
+body.broken .node.k-logic{opacity:.72;filter:none}
+body.broken .node.k-fail{opacity:1;filter:none}
+body.broken .node.k-fail .tile{border-color:#E2544C;background:#2A1412;
+  box-shadow:0 0 0 4px rgba(226,84,76,.12),0 0 28px rgba(226,84,76,.3)}
+body.broken .node.k-fail .lbl{color:#F1ABA5}
+body.broken .node.k-fail .kind{color:#B4655F}
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin:0;padding:15px 26px;
+  border-top:1px solid #23282F;background:#14181E;font-size:12px;
+  color:#7C8797}
+/* The legend keys the icon colours on the canvas, not border styles — the
+   canvas stopped distinguishing node types by border the moment it started
+   using icons, and a legend that describes the previous drawing is worse than
+   none. */
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;
+  margin-right:7px;vertical-align:-1px;border:1.5px solid #333B47;
+  background:#1B2028}
+.legend .t{background:#E0A84B;border-color:#E0A84B}
+.legend .s{background:#6E8EF2;border-color:#6E8EF2}
+.legend .l{background:transparent;border-color:#A98BF0;border-style:dashed}
+.legend .h{background:#4FB3A6;border-color:#4FB3A6}
+.legend .g{background:#47A06B;border-color:#47A06B}
+.legend .r{background:#E2544C;border-color:#E2544C}
 
 /* ---- failure section: the loudest thing on the page ---- */
 .failure{background:var(--ink);color:#E8E6E0}
@@ -129,7 +176,8 @@ a{color:var(--green)}
 @media(max-width:640px){
   .step{grid-template-columns:36px 1fr;gap:12px}
   .stats .wrap{gap:26px}
-  .node{min-width:120px}
+  .node{width:100px;margin-right:24px}
+  .node .wire{left:82px;width:26px}
 }
 </style>
 </head>
@@ -177,11 +225,14 @@ a{color:var(--green)}
       <span class="hint" id="hint">Currently showing the happy path.</span>
     </div>
     <div class="diagram">
-      <div class="flow" id="flow"></div>
+      <div class="canvasbar"><i></i><i></i><i></i>
+        <b>WhatsApp Lead Qualifier — client-facing view</b> · the build itself is not published</div>
+      <div class="canvas"><div class="flow" id="flow"></div></div>
       <div class="legend">
-        <span><i class="c"></i>A step the system takes</span>
-        <span><i class="c" style="border-style:dashed"></i>A decision point</span>
-        <span><i class="c" style="border-left:4px solid #12151B"></i>A person acts</span>
+        <span><i class="t"></i>Where it starts</span>
+        <span><i class="s"></i>A step the system takes</span>
+        <span><i class="l"></i>A decision point</span>
+        <span><i class="h"></i>A person acts</span>
         <span><i class="g"></i>Good outcome</span>
         <span><i class="r"></i>Failure path — held, escalated, alerted</span>
       </div>
@@ -233,15 +284,39 @@ a{color:var(--green)}
 <script>
 var DATA = {"nodes": [{"id": "in", "label": "A lead messages, any hour", "kind": "trigger"}, {"id": "qual", "label": "Answered and qualified in conversation", "kind": "step"}, {"id": "hot", "label": "Ready to move?", "kind": "logic"}, {"id": "hand", "label": "Yes → broker gets it, slot booked", "kind": "success"}, {"id": "warm", "label": "Not yet → kept warm, not dropped", "kind": "step"}, {"id": "err", "label": "A broken step is caught and alerted", "kind": "fail"}], "edges": [{"a": "in", "b": "qual"}, {"a": "qual", "b": "hot"}, {"a": "hot", "b": "hand"}, {"a": "hot", "b": "warm"}, {"a": "qual", "b": "err"}], "fails": [{"what": "Unverified inbound request", "detect": "Meta webhook signature check", "does": "Rejected before any processing", "who": "Logged, no alert needed"}, {"what": "Same message delivered twice", "detect": "Redis deduplication", "does": "Second copy dropped — the lead is not answered twice", "who": "Nobody — by design"}, {"what": "Message arrives outside business hours", "detect": "Business-hours branch", "does": "Answered and qualified anyway, agent handoff deferred", "who": "Broker sees it in the morning with context"}, {"what": "AI provider call fails", "detect": "API error", "does": "Error logged, alert fired on the live channel — the lead is not silently dropped", "who": "Immediate alert"}, {"what": "Calendar booking fails", "detect": "API error", "does": "Broker still alerted with the conversation, booking flagged", "who": "Alert names the failed booking"}, {"what": "Lead goes quiet after qualifying", "detect": "No reply in the window", "does": "Enters the follow-up sequence rather than being closed", "who": "Nobody — handled"}, {"what": "Anything unanticipated", "detect": "Error handling on every critical path", "does": "Halt that path, keep the conversation state", "who": "Live alert channel"}], "journey": [{"h": "A lead messages", "b": "On WhatsApp, at any hour, with no form to fill in."}, {"h": "The request is verified", "b": "Signature-checked before anything runs, and deduplicated so one message means one conversation."}, {"h": "Someone answers immediately", "b": "The agent holds context across the whole conversation, so the lead is not repeating themselves."}, {"h": "The clock is respected", "b": "Inside hours a live agent takes over. Outside hours the lead is still qualified, not parked."}, {"h": "A hot lead reaches the broker", "b": "With the full conversation and a calendar slot already booked — not a notification to go and read something."}, {"h": "A cold lead is kept", "b": "A three-day follow-up sequence, because not-now is not the same as no."}, {"h": "A broken step is visible", "b": "Every critical path logs errors to a live alert channel. This is the part that keeps the zero honest."}], "name": "WhatsApp Lead Qualifier", "eyebrow": "24/7 inbound qualification", "promise": "Every inbound WhatsApp lead is answered immediately, qualified in conversation, and either handed to an agent with full context or put into a follow-up sequence.", "audience": "Real estate brokers", "status": "running on my own n8n", "metrics": [["Production version", "v4.0"], ["Coverage", "24/7"], ["Missed leads", "0"]]};
 
+var ICON = {
+  trigger: '<path d="M13.4 2.6 6 13.4h4.6L9.4 21.4 17.6 10h-4.8z"/>',
+  step:    '<path d="M4.6 12h12M12.4 7.6 16.8 12l-4.4 4.4"/>',
+  logic:   '<path d="M12 3.6 20.4 12 12 20.4 3.6 12z"/>',
+  human:   '<circle cx="12" cy="8" r="3.3"/>'
+           + '<path d="M5.4 20.2c0-3.7 2.9-6.6 6.6-6.6s6.6 2.9 6.6 6.6"/>',
+  success: '<path d="M5.8 12.6 10.1 17 18.4 7.6"/>',
+  fail:    '<path d="M12 3.6 21.2 19.6H2.8z"/><path d="M12 9.6v4.3"/>'
+           + '<path d="M12 16.6h.01"/>'
+};
+
 var flow = document.getElementById('flow');
 DATA.nodes.forEach(function(n, i){
   var d = document.createElement('div');
   d.className = 'node k-' + n.kind;
+
+  var tile = document.createElement('div');
+  tile.className = 'tile';
+  tile.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">'
+    + (ICON[n.kind] || ICON.step) + '</svg>';
+
   var k = document.createElement('span');
   k.className = 'kind';
   k.textContent = (i + 1 < 10 ? '0' : '') + (i + 1);
-  var t = document.createElement('span'); t.textContent = n.label;
-  d.appendChild(k); d.appendChild(t);
+
+  var t = document.createElement('span');
+  t.className = 'lbl';
+  t.textContent = n.label;
+
+  var w = document.createElement('div');
+  w.className = 'wire';
+
+  d.appendChild(tile); d.appendChild(k); d.appendChild(t); d.appendChild(w);
   flow.appendChild(d);
 });
 

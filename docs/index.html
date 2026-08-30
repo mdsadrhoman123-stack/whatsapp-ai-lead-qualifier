@@ -113,6 +113,19 @@ button.ghost{background:transparent;color:var(--ink)}
 .node .kind{display:block;font-size:9.5px;letter-spacing:1.5px;
   text-transform:uppercase;color:#5D6877;margin:0 0 4px}
 .node .lbl{display:block;font-size:12.5px;line-height:1.34;color:#C2CBD6}
+/* Several labels are written "what went wrong → what happens about it". The half
+   after the arrow is the answer, and on a red tile it is the only thing that
+   separates a handled failure from a broken product. It gets its own line and
+   its own colour rather than being left to be read second. */
+.node .fix{display:block;color:#93A3B3}
+/* On a red tile the recovery half gets a filled chip, not just a colour. Thin
+   coloured text at this size is a few hundred antialiased pixels; downscaled for
+   the GIF and quantised to a 256-colour palette it came out a blue-grey, which
+   made the one line that distinguishes "handled" from "dead" the first thing to
+   be lost. A solid area of colour survives both. */
+body.broken .node.k-fail .fix{color:#A8ECC2;font-weight:600;
+  background:#19301F;border:1px solid #3C7A55;border-radius:5px;padding:3px 5px;
+  margin:4px -3px 0}
 .node.k-trigger .tile svg{color:#E0A84B}
 .node.k-step    .tile svg{color:#6E8EF2}
 .node.k-logic   .tile svg{color:#A98BF0}
@@ -122,12 +135,38 @@ button.ghost{background:transparent;color:var(--ink)}
 .node.k-logic   .tile{border-style:dashed}
 .node.k-success .tile{border-color:#47A06B;background:#16281D}
 .node.k-fail    .tile{border-color:#8C3B34;background:#281410}
-/* Break it: the failure paths are the only thing left with the lights on. */
-body.broken .node{opacity:.2;filter:grayscale(1)}
+/* A run in progress. n8n draws its own executions roughly this way — the steps
+   not reached yet sit back, the one executing carries a ring, the finished ones
+   keep their colour. Copying that is not decoration: it is a state the client has
+   already watched on somebody's screen, so it needs no legend. Placed after the
+   per-kind colours on purpose, so a pending tile greys out without !important. */
+.node.pending{opacity:.3}
+.node.pending .tile{border-color:#2A313B;background:#171B22}
+.node.pending .tile svg{color:#3E4854}
+.node.pending .wire,.node.pending .wire:after{background:#252B34}
+.node.active .tile{box-shadow:0 0 0 4px rgba(110,142,242,.16),
+  0 0 22px rgba(110,142,242,.24)}
+.node.active.k-success .tile{box-shadow:0 0 0 4px rgba(126,220,160,.18),
+  0 0 26px rgba(126,220,160,.32)}
+/* A failure branch is not a step. Lighting the red tiles in sequence with
+   everything else said the escalation fires on every single run, which is both
+   untrue and the exact impression this recording is trying not to leave. So on a
+   good pass they sit dashed and unlit — a route that exists and was not needed —
+   and they only come on when Break it is pressed. */
+.node.idle{opacity:.42}
+.node.idle .tile{border-color:#333B47;border-style:dashed;background:#1B2028}
+.node.idle .tile svg{color:#5D6877}
+.node.idle .lbl,.node.idle .fix{color:#79838F}
+/* Break it: the failure paths are the ones with the lights on — but the rest of
+   the system is dimmed, not switched off, and the good outcome stays legible.
+   "Handling this" and "dead" have to look different at a glance. */
+body.broken .node{opacity:.34;filter:saturate(.3)}
 body.broken .node .wire,body.broken .node .wire:after{background:#2A303A}
 body.broken .node.k-logic{opacity:.72;filter:none}
+body.broken .node.k-success{opacity:.8;filter:none}
 body.broken .node.k-fail{opacity:1;filter:none}
 body.broken .node.k-fail .tile{border-color:#E2544C;background:#2A1412;
+  border-style:solid;
   box-shadow:0 0 0 4px rgba(226,84,76,.12),0 0 28px rgba(226,84,76,.3)}
 body.broken .node.k-fail .lbl{color:#F1ABA5}
 body.broken .node.k-fail .kind{color:#B4655F}
@@ -217,10 +256,13 @@ a{color:var(--green)}
   <div class="wrap">
     <h2>How it flows</h2>
     <p class="lede">What happens to the client's work, in the order they
-    experience it — not the internal build, which is not published. Then press
-    <b>Break it</b> — the failure paths stay lit and everything else fades.
-    That is the half of the system most portfolios never show you.</p>
+    experience it — not the internal build, which is not published. The canvas
+    runs itself when this page opens, one step at a time. Then press
+    <b>Break it</b> — the failure paths stay lit, each carrying what the system
+    does about it, and everything else fades. That is the half of the system most
+    portfolios never show you.</p>
     <div class="controls">
+      <button class="act ghost" id="run">Run it again</button>
       <button class="act" id="brk" aria-pressed="false">Break it</button>
       <span class="hint" id="hint">Currently showing the happy path.</span>
     </div>
@@ -311,7 +353,14 @@ DATA.nodes.forEach(function(n, i){
 
   var t = document.createElement('span');
   t.className = 'lbl';
-  t.textContent = n.label;
+  var parts = n.label.split(' → ');
+  t.appendChild(document.createTextNode(parts[0]));
+  if (parts.length > 1) {
+    var fx = document.createElement('span');
+    fx.className = 'fix';
+    fx.textContent = '→ ' + parts.slice(1).join(' → ');
+    t.appendChild(fx);
+  }
 
   var w = document.createElement('div');
   w.className = 'wire';
@@ -319,6 +368,45 @@ DATA.nodes.forEach(function(n, i){
   d.appendChild(tile); d.appendChild(k); d.appendChild(t); d.appendChild(w);
   flow.appendChild(d);
 });
+
+// The canvas executes itself once, as soon as the page opens, one step at a time.
+// A still picture of a finished run only asserts that the system works; a run the
+// reader watches complete is the thing they recognise, because it is what their
+// own automation screen does. It is also why the recording can open on a working
+// pass instead of on a sentence claiming one.
+var NODES = Array.prototype.slice.call(flow.querySelectorAll('.node'));
+// The failure branches are not part of a good pass, so the run walks past them.
+var STEPS = NODES.filter(function(n){ return !n.classList.contains('k-fail'); });
+var runTimer = null;
+
+function runFlow(){
+  clearTimeout(runTimer);
+  NODES.forEach(function(n){
+    n.classList.remove('done', 'active', 'pending', 'idle');
+    n.classList.add(n.classList.contains('k-fail') ? 'idle' : 'pending');
+  });
+  var i = 0;
+  (function tick(){
+    if (i >= STEPS.length) {
+      STEPS.forEach(function(n){
+        n.classList.remove('pending', 'active');
+        n.classList.add('done');
+      });
+      if (!document.body.classList.contains('broken')) {
+        hint.textContent = 'That run completed. The dashed tiles are the paths '
+          + 'it did not need — press Break it and they light up.';
+      }
+      return;
+    }
+    if (i > 0) STEPS[i - 1].classList.remove('active');
+    STEPS[i].classList.remove('pending');
+    STEPS[i].classList.add('active', 'done');
+    i++;
+    runTimer = setTimeout(tick, 380);
+  })();
+}
+runFlow();
+document.getElementById('run').addEventListener('click', runFlow);
 
 var j = document.getElementById('journey');
 DATA.journey.forEach(function(s, i){

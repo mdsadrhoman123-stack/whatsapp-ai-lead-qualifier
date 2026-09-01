@@ -6,9 +6,11 @@
 
 ![running on my own n8n](https://img.shields.io/badge/status-running%20on%20my%20own%20n8n-2F6B52?style=flat-square) ![availability](https://img.shields.io/badge/availability-ready%20to%20deploy-5B6472?style=flat-square) ![sector](https://img.shields.io/badge/sector-Real%20estate-12151B?style=flat-square) ![built with](https://img.shields.io/badge/built%20with-n8n-12151B?style=flat-square) ![Production version](https://img.shields.io/badge/Production%20version-v4.0-5B6472?style=flat-square) [![honesty check](https://github.com/mdsadrhoman123-stack/whatsapp-ai-lead-qualifier/actions/workflows/honesty-check.yml/badge.svg)](https://github.com/mdsadrhoman123-stack/whatsapp-ai-lead-qualifier/actions/workflows/honesty-check.yml)
 
-<img src="assets/demo.gif" alt="WhatsApp Lead Qualifier: the flow completing on a good run, then Break it pressed — every failure path lit in red with what the system does about it — then the flow restored" width="100%">
+<img src="assets/demo.gif" alt="WhatsApp Lead Qualifier: one execution running step by step, a step failing on purpose — held and escalated, in red — then that same step handled and the run completing" width="100%">
 
-**The system working, then the same system taking a hit on purpose and catching it.** That is a recording of [`docs/index.html`](docs/index.html) in this repository — one file, no build step, no network — with the **Break it** button actually pressed, not illustrated. Every red path carries what happens next: held, escalated, or someone told. Nothing fails quietly.
+<p align="center">v4.0 in production · <b>7 failure paths, every one alerted</b> · 24/7 coverage · 0 missed leads</p>
+
+**One execution, with a failure injected into it on purpose — and the work still finishing.** That is a recording of [`docs/index.html`](docs/index.html) in this repository — one file, no build step, no network — running its own steps, not an illustration of them. The red step is the interesting one: it is held, someone is told, and then it is dealt with and the run carries on. Nothing fails quietly. Open the page yourself and **Break it** lights every failure path at once, each carrying what happens next.
 
 > [!NOTE]
 > **What this is.** A production-grade system built to a brief that businesses in this sector post publicly, in their own words — the problem exactly as they stated it, not one invented to demonstrate something. It was engineered the way anything a business actually depends on has to be: the failure paths designed before the features, every one of them logged and alerted rather than left to chance. It runs on my own infrastructure. It is ready to deploy for any business with this problem, and it has not been sold or deployed into a customer's business yet.
@@ -27,7 +29,7 @@
 
 ### On this page
 
-[The problem](#the-problem) · [What changed](#what-changed) · [How it works](#how-it-works) · [The shape of it](#the-shape-of-the-system) · [When it breaks](#when-it-breaks) · [Why this way](#why-it-is-built-this-way) · [Limitations](#honest-limitations) · [What is here](#what-is-in-this-repository) · [Read deeper](#read-deeper)
+[The problem](#the-problem) · [What changed](#what-changed) · [What the client gets](#what-lands-in-front-of-the-client) · [How it works](#how-it-works) · [The shape of it](#the-shape-of-the-system) · [When it breaks](#when-it-breaks) · [Why this way](#why-it-is-built-this-way) · [Limitations](#honest-limitations) · [What is here](#what-is-in-this-repository) · [Read deeper](#read-deeper)
 
 ---
 
@@ -49,6 +51,12 @@ Manual triage cannot cover the clock, and a broker reading back through a thread
 | **A failed step** | Nobody notices | Error logged and alerted live |
 
 <sub>Before/after describes the change in process, not benchmarked throughput. Where a number is not measured, it is not claimed.</sub>
+
+## What lands in front of the client
+
+<img src="assets/output.png" alt="WhatsApp Lead Qualifier: sample of the output a client receives, including one step that failed and what happened instead" width="100%">
+
+**Sample output — every figure and every person in it is invented for the illustration.** No client data exists in this repository in any form: not anonymised, not sampled, not a redacted screenshot. What is not invented is the shape of it — the steps are this project's own, and the step called out mid-way is one row of the failure table further down this page, with what happened instead. It is a rendered image rather than markup for the same reason the internal build is not published: the output is a template, and a template in markup is a template anyone can paste into their own project and run.
 
 ## How it works
 
@@ -119,7 +127,7 @@ flowchart LR
 Red appears in exactly one role across every repo in this portfolio: where failure goes. Nowhere else. If you see red, something is being held, escalated or alerted.
 </details>
 
-> **Walk it interactively** — [`docs/index.html`](docs/index.html) is a single self-contained page. Download it, open it in any browser, and press **Break it** to watch the failure path light up. Nothing to install, no network calls.
+> **Walk it interactively** — [`docs/index.html`](docs/index.html) is a single self-contained page. Download it, open it in any browser, and it executes one run in front of you — failure included. **Run it again** gives you a clean pass, **Break it** lights every failure path at once. Nothing to install, no network calls.
 
 ## The shape of the system
 
@@ -260,6 +268,7 @@ whatsapp-ai-lead-qualifier/
 ├── assets/ ......................... local files only — nothing from a CDN
 │   ├── banner.svg .................. the header on this page
 │   ├── demo.gif .................... the recording at the top of this page
+│   ├── output.png .................. a sample of what the client receives
 │   └── cta.svg ..................... the closing card
 │
 ├── workflows/ ...................... empty on purpose — see below

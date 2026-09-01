@@ -78,9 +78,22 @@ section .lede{color:var(--muted);max-width:64ch;margin:0 0 30px;font-size:16.5px
 .canvasbar i{width:9px;height:9px;border-radius:50%;background:#2E3540;
   display:inline-block;flex:0 0 auto}
 .canvasbar b{color:#AEB9C7;font-weight:600}
-.canvas{padding:32px 26px 20px;overflow-x:auto;
-  background-image:radial-gradient(#1E242C 1.1px,transparent 1.1px);
-  background-size:22px 22px;background-position:-11px -11px}
+/* The live state of the run, in the one place a frozen frame is still readable.
+   The recording plays once and stops, so whatever the last frame says is what a
+   reader arriving late will read — it has to stand on its own. */
+.cstate{margin-left:auto;font-size:11px;letter-spacing:1.5px;
+  text-transform:uppercase;color:#8A94A3;white-space:nowrap}
+.cstate.ok{color:#7EDCA0}
+.cstate.bad{color:#E2544C}
+/* The canvas is lit from above: a soft pool of light at the top of the plane,
+   falling off to near-black at the bottom, with the dotted grid painted over it.
+   That single gradient is what makes the tiles below read as objects standing on
+   a surface rather than squares printed on a flat colour. */
+.canvas{padding:52px 30px 34px;overflow-x:auto;
+  background-image:radial-gradient(#242C39 1.1px,transparent 1.1px),
+    radial-gradient(130% 100% at 50% -26%,#2A3446 0%,#171D27 44%,#0A0C10 100%);
+  background-size:22px 22px,auto;
+  background-position:-11px -11px,0 0}
 .controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;
   margin:0 0 20px}
 button.act{font:inherit;font-size:14px;font-weight:600;cursor:pointer;
@@ -93,22 +106,42 @@ button.ghost{background:transparent;color:var(--ink)}
 .flow{display:flex;flex-wrap:wrap;gap:0;align-items:flex-start}
 .node{position:relative;width:116px;margin:0 34px 26px 0;text-align:center;
   transition:.22s}
-.node .tile{position:relative;width:76px;height:76px;margin:0 auto 11px;
-  border-radius:15px;background:#1B2028;border:1.5px solid #333B47;
-  display:flex;align-items:center;justify-content:center;transition:.22s}
-.node .tile svg{width:30px;height:30px;stroke:currentColor;fill:none;
+/* Every tile is an extruded slab rather than a square: a lit top face, a stack of
+   zero-blur shadows stepping down and right to build the side of the object, and
+   one soft ambient shadow under it. That is how this canvas gets its depth — the
+   geometry itself is never rotated, because the labels are 12.5px and a tilted
+   plane is the point where a diagram stops being readable and becomes a picture
+   of one. Height also carries state: a step not yet reached lies flat on the
+   surface, the one executing lifts clear of it, a finished one stands raised. */
+.node .tile{position:relative;width:82px;height:82px;margin:0 auto 21px;
+  border-radius:18px;
+  background:linear-gradient(158deg,#3B4657 0%,#242C38 44%,#151A23 100%);
+  border:1.5px solid #4A5566;border-top-color:#6E7C90;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.16),
+    inset 0 -5px 9px rgba(0,0,0,.42),
+    1px 2px 0 #1B2029,2px 4px 0 #171C24,3px 6px 0 #13181F,
+    4px 8px 0 #0F141A,5px 10px 0 #0C1015,6px 12px 0 #090C11,
+    7px 14px 0 #06080C,0 20px 30px rgba(0,0,0,.58);
+  transition:transform .2s,box-shadow .2s,background .2s,border-color .2s}
+.node .tile svg{width:32px;height:32px;stroke:currentColor;fill:none;
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 /* the two ports every node in an editor like this has */
-.node .tile:before,.node .tile:after{content:"";position:absolute;width:7px;
-  height:7px;border-radius:50%;background:#39414E;top:50%;margin-top:-3.5px}
-.node .tile:before{left:-4.5px}
-.node .tile:after{right:-4.5px}
+.node .tile:before,.node .tile:after{content:"";position:absolute;width:8px;
+  height:8px;border-radius:50%;background:#465061;top:50%;margin-top:-4px;
+  box-shadow:0 1px 0 rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.2)}
+.node .tile:before{left:-5px}
+.node .tile:after{right:-5px}
 .node:first-child .tile:before{display:none}
-.node .wire{position:absolute;left:96px;top:38px;width:38px;height:1.5px;
-  background:#333B47;transition:.22s}
-.node .wire:after{content:"";position:absolute;right:-1px;top:-3.2px;
-  border-left:6px solid #333B47;border-top:4px solid transparent;
-  border-bottom:4px solid transparent}
+/* The connector is a pipe lying on the plane, not a hairline: a lit upper edge, a
+   dark lower one, and a shadow under it. At this scale that is three pixels of
+   work and it is what stops the tiles looking like they float unconnected. */
+.node .wire{position:absolute;left:101px;top:39px;width:48px;height:5px;
+  border-radius:3px;background:linear-gradient(#6B7889,#333B47);
+  box-shadow:0 2px 0 rgba(0,0,0,.6);transition:.22s}
+.node .wire:after{content:"";position:absolute;right:-6px;top:-3.5px;
+  border-left:8px solid #6B7889;border-top:6px solid transparent;
+  border-bottom:6px solid transparent;filter:drop-shadow(0 2px 0 rgba(0,0,0,.55))}
 .node:last-child .wire{display:none}
 .node .kind{display:block;font-size:9.5px;letter-spacing:1.5px;
   text-transform:uppercase;color:#5D6877;margin:0 0 4px}
@@ -123,9 +156,9 @@ button.ghost{background:transparent;color:var(--ink)}
    the GIF and quantised to a 256-colour palette it came out a blue-grey, which
    made the one line that distinguishes "handled" from "dead" the first thing to
    be lost. A solid area of colour survives both. */
-body.broken .node.k-fail .fix{color:#A8ECC2;font-weight:600;
-  background:#19301F;border:1px solid #3C7A55;border-radius:5px;padding:3px 5px;
-  margin:4px -3px 0}
+body.broken .node.k-fail .fix,.node.hit .fix,.node.handled .fix{color:#A8ECC2;
+  font-weight:600;background:#19301F;border:1px solid #3C7A55;border-radius:5px;
+  padding:3px 5px;margin:4px -3px 0}
 .node.k-trigger .tile svg{color:#E0A84B}
 .node.k-step    .tile svg{color:#6E8EF2}
 .node.k-logic   .tile svg{color:#A98BF0}
@@ -133,30 +166,79 @@ body.broken .node.k-fail .fix{color:#A8ECC2;font-weight:600;
 .node.k-success .tile svg{color:#7EDCA0}
 .node.k-fail    .tile svg{color:#E2544C}
 .node.k-logic   .tile{border-style:dashed}
-.node.k-success .tile{border-color:#47A06B;background:#16281D}
-.node.k-fail    .tile{border-color:#8C3B34;background:#281410}
+.node.k-success .tile{border-color:#4CA872;border-top-color:#7ADCA6;
+  background:linear-gradient(158deg,#2C583C 0%,#1B3524 44%,#0F2015 100%)}
+.node.k-fail    .tile{border-color:#96453D;border-top-color:#D07268;
+  background:linear-gradient(158deg,#55261F 0%,#331714 44%,#1E0C0A 100%)}
 /* A run in progress. n8n draws its own executions roughly this way — the steps
    not reached yet sit back, the one executing carries a ring, the finished ones
    keep their colour. Copying that is not decoration: it is a state the client has
    already watched on somebody's screen, so it needs no legend. Placed after the
    per-kind colours on purpose, so a pending tile greys out without !important. */
-.node.pending{opacity:.3}
-.node.pending .tile{border-color:#2A313B;background:#171B22}
+.node.pending{opacity:.4}
+.node.pending .tile{border-color:#2B323D;border-top-color:#39424F;
+  background:linear-gradient(158deg,#1E242D,#141920);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),
+    1px 1px 0 #12161C,0 4px 8px rgba(0,0,0,.4)}
 .node.pending .tile svg{color:#3E4854}
-.node.pending .wire,.node.pending .wire:after{background:#252B34}
-.node.active .tile{box-shadow:0 0 0 4px rgba(110,142,242,.16),
-  0 0 22px rgba(110,142,242,.24)}
-.node.active.k-success .tile{box-shadow:0 0 0 4px rgba(126,220,160,.18),
-  0 0 26px rgba(126,220,160,.32)}
+.node.pending .tile:before,.node.pending .tile:after{background:#2C333E;
+  box-shadow:none}
+.node.pending .wire{background:linear-gradient(#39424F,#232A33);box-shadow:none}
+.node.pending .wire:after{border-left-color:#39424F;filter:none}
+/* The lift is the state, not an effect on top of it. A step that has not been
+   reached lies flat on the plane with one pixel of side showing; the one executing
+   stands nine pixels clear of it with a full side face and a ring of light around
+   it. Read across the row, the height difference alone tells you where the run is,
+   before any colour does. */
+.node.active .tile{transform:translateY(-9px);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.2),
+    inset 0 -5px 9px rgba(0,0,0,.36),
+    1px 2px 0 #1B2029,2px 4px 0 #171C24,3px 6px 0 #13181F,4px 8px 0 #0F141A,
+    5px 10px 0 #0C1015,6px 12px 0 #090C11,7px 14px 0 #06080C,8px 16px 0 #04060A,
+    0 28px 42px rgba(0,0,0,.62),
+    0 0 0 4px rgba(110,142,242,.2),0 0 32px rgba(110,142,242,.34)}
+.node.active.k-success .tile{box-shadow:inset 0 2px 0 rgba(255,255,255,.2),
+    inset 0 -5px 9px rgba(0,0,0,.34),
+    1px 2px 0 #14291C,2px 4px 0 #112317,3px 6px 0 #0E1D13,4px 8px 0 #0B170F,
+    5px 10px 0 #08110B,6px 12px 0 #060D08,7px 14px 0 #040906,8px 16px 0 #020604,
+    0 28px 42px rgba(0,0,0,.62),
+    0 0 0 4px rgba(126,220,160,.22),0 0 34px rgba(126,220,160,.38)}
 /* A failure branch is not a step. Lighting the red tiles in sequence with
    everything else said the escalation fires on every single run, which is both
    untrue and the exact impression this recording is trying not to leave. So on a
    good pass they sit dashed and unlit — a route that exists and was not needed —
    and they only come on when Break it is pressed. */
 .node.idle{opacity:.42}
-.node.idle .tile{border-color:#333B47;border-style:dashed;background:#1B2028}
+.node.idle .tile{border-color:#3A4350;border-top-color:#4A5563;
+  border-style:dashed;
+  background:linear-gradient(158deg,#232A34,#161B23);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),
+    1px 1px 0 #12161C,0 5px 10px rgba(0,0,0,.42)}
 .node.idle .tile svg{color:#5D6877}
+.node.idle .tile:before,.node.idle .tile:after{background:#333B47;
+  box-shadow:none}
 .node.idle .lbl,.node.idle .fix{color:#79838F}
+/* The fault-injection pass, which is the story the recording tells. The tile the
+   failure lands on rises highest and turns red, holds long enough to be read,
+   then settles green with its recovery line showing. A failure in one of these
+   systems is a detour that ends in the work still getting done — that is what
+   actually happens, and it is a better thing to show than a red end state. */
+.node.hit .tile{transform:translateY(-13px);
+  border-color:#E2544C;border-top-color:#FF8C84;border-style:solid;
+  background:linear-gradient(158deg,#6B2E26 0%,#3E1A16 44%,#22100D 100%);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.2),
+    inset 0 -5px 9px rgba(0,0,0,.34),
+    1px 2px 0 #24100D,2px 4px 0 #1F0E0B,3px 6px 0 #1A0B09,4px 8px 0 #150907,
+    5px 10px 0 #100706,6px 12px 0 #0B0504,7px 14px 0 #070303,8px 16px 0 #040202,
+    9px 18px 0 #020101,0 32px 48px rgba(0,0,0,.66),
+    0 0 0 5px rgba(226,84,76,.24),0 0 40px rgba(226,84,76,.46)}
+.node.hit .tile svg{color:#FF8078}
+.node.hit .lbl{color:#F6C2BD}
+.node.handled .tile{border-color:#4CA872;border-top-color:#86E4AE;
+  border-style:solid;
+  background:linear-gradient(158deg,#2F6042 0%,#1C3A27 44%,#102217 100%)}
+.node.handled .tile svg{color:#8AE8AE}
+.node.handled .lbl{color:#C9D8CD}
 /* Break it: the failure paths are the ones with the lights on — but the rest of
    the system is dimmed, not switched off, and the good outcome stays legible.
    "Handling this" and "dead" have to look different at a glance. */
@@ -165,9 +247,16 @@ body.broken .node .wire,body.broken .node .wire:after{background:#2A303A}
 body.broken .node.k-logic{opacity:.72;filter:none}
 body.broken .node.k-success{opacity:.8;filter:none}
 body.broken .node.k-fail{opacity:1;filter:none}
-body.broken .node.k-fail .tile{border-color:#E2544C;background:#2A1412;
-  border-style:solid;
-  box-shadow:0 0 0 4px rgba(226,84,76,.12),0 0 28px rgba(226,84,76,.3)}
+body.broken .node.k-fail .tile{transform:translateY(-9px);
+  border-color:#E2544C;border-top-color:#FF8C84;border-style:solid;
+  background:linear-gradient(158deg,#6B2E26 0%,#3E1A16 44%,#22100D 100%);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.18),
+    inset 0 -5px 9px rgba(0,0,0,.34),
+    1px 2px 0 #24100D,2px 4px 0 #1F0E0B,3px 6px 0 #1A0B09,4px 8px 0 #150907,
+    5px 10px 0 #100706,6px 12px 0 #0B0504,
+    0 24px 36px rgba(0,0,0,.6),
+    0 0 0 4px rgba(226,84,76,.2),0 0 34px rgba(226,84,76,.4)}
+body.broken .node.k-fail .tile svg{color:#FF8078}
 body.broken .node.k-fail .lbl{color:#F1ABA5}
 body.broken .node.k-fail .kind{color:#B4655F}
 .legend{display:flex;flex-wrap:wrap;gap:18px;margin:0;padding:15px 26px;
@@ -215,8 +304,8 @@ a{color:var(--green)}
 @media(max-width:640px){
   .step{grid-template-columns:36px 1fr;gap:12px}
   .stats .wrap{gap:26px}
-  .node{width:100px;margin-right:24px}
-  .node .wire{left:82px;width:26px}
+  .node{width:104px;margin-right:26px}
+  .node .wire{left:94px;width:30px}
 }
 </style>
 </head>
@@ -257,18 +346,21 @@ a{color:var(--green)}
     <h2>How it flows</h2>
     <p class="lede">What happens to the client's work, in the order they
     experience it — not the internal build, which is not published. The canvas
-    runs itself when this page opens, one step at a time. Then press
-    <b>Break it</b> — the failure paths stay lit, each carrying what the system
-    does about it, and everything else fades. That is the half of the system most
-    portfolios never show you.</p>
+    runs one execution the moment this page opens, and that run hits a failure on
+    purpose so you can see what the system does about it before you have to find
+    out in production. <b>Run it again</b> gives you a clean pass; <b>Break it</b>
+    lights every failure path at once, each carrying what happens next. That is
+    the half of the system most portfolios never show you.</p>
     <div class="controls">
       <button class="act ghost" id="run">Run it again</button>
       <button class="act" id="brk" aria-pressed="false">Break it</button>
-      <span class="hint" id="hint">Currently showing the happy path.</span>
+      <span class="hint" id="hint">Running one execution now — with a failure
+      injected on purpose.</span>
     </div>
     <div class="diagram">
       <div class="canvasbar"><i></i><i></i><i></i>
-        <b>WhatsApp Lead Qualifier — client-facing view</b> · the build itself is not published</div>
+        <b>WhatsApp Lead Qualifier — client-facing view</b> · the build itself is not published
+        <span class="cstate" id="cstate">Ready</span></div>
       <div class="canvas"><div class="flow" id="flow"></div></div>
       <div class="legend">
         <span><i class="t"></i>Where it starts</span>
@@ -369,44 +461,125 @@ DATA.nodes.forEach(function(n, i){
   flow.appendChild(d);
 });
 
-// The canvas executes itself once, as soon as the page opens, one step at a time.
-// A still picture of a finished run only asserts that the system works; a run the
+// The canvas executes itself as soon as the page opens, one step at a time. A
+// still picture of a finished run only asserts that the system works; a run the
 // reader watches complete is the thing they recognise, because it is what their
-// own automation screen does. It is also why the recording can open on a working
-// pass instead of on a sentence claiming one.
+// own automation screen does.
+//
+// That opening pass injects a fault on purpose, and then recovers from it. Two
+// reasons. A client's real question is not "does it work on a good day" — it is
+// "what happens when it goes wrong and nobody is watching", and answering the
+// easy question only leaves the hard one for them to discover in production. And
+// a failure in one of these systems genuinely is a detour rather than an ending:
+// the branch fires, somebody is told, the work still finishes. Showing it resolve
+// is not softening the failure, it is the accurate version of it.
+//
+// `Run it again` runs clean, so nothing here can be read as claiming the
+// escalation fires on every single execution. It does not.
 var NODES = Array.prototype.slice.call(flow.querySelectorAll('.node'));
-// The failure branches are not part of a good pass, so the run walks past them.
-var STEPS = NODES.filter(function(n){ return !n.classList.contains('k-fail'); });
+var cstate = document.getElementById('cstate');
+var hintEl = document.getElementById('hint');
 var runTimer = null;
 
-function runFlow(){
-  clearTimeout(runTimer);
+function isFail(n){ return n.classList.contains('k-fail'); }
+function isEnd(n){ return n.classList.contains('k-success'); }
+
+// Execution order, which is not the order the tiles are drawn in. The canvas is
+// laid out left to right in reading order and puts the outcome tile near the end,
+// but the escalation branch is drawn after it on most of these flows — so walking
+// the DOM would reach "delivered" and only then discover the failure, which is
+// backwards. Deferring the outcome tile to last is what makes the sequence say
+// the true thing: something went wrong on the way, and the work still landed.
+var ORDER = NODES.filter(function(n){ return !isEnd(n); })
+            .concat(NODES.filter(isEnd));
+// Only the first failure branch is the injected one. Where a flow has two, the
+// second stays dashed — one thing went wrong, not everything, and lighting both
+// would claim a compound failure that did not happen.
+var FAULT = ORDER.filter(isFail)[0] || null;
+
+function say(text, cls){
+  cstate.textContent = text;
+  cstate.className = 'cstate' + (cls ? ' ' + cls : '');
+}
+
+// The number the status line quotes has to be the number printed under the tile,
+// which is its position in the drawing — not its position in the execution order.
+// Those differ on nine of these eleven flows, because the escalation branch is
+// drawn after the outcome tile and executed before it. Quoting the wrong one puts
+// "step 4 failed" next to a red tile labelled 05.
+function num(n){
+  var i = NODES.indexOf(n) + 1;
+  return (i < 10 ? '0' : '') + i;
+}
+
+// `pose` is the whole state machine in one place: given a beat, it says what every
+// tile looks like. The animation below is just a list of beats played on a timer,
+// and nothing else in the page writes these classes — so a frame captured by the
+// recorder and a frame a visitor sees come out of the same function.
+function pose(stage, upto){
   NODES.forEach(function(n){
-    n.classList.remove('done', 'active', 'pending', 'idle');
-    n.classList.add(n.classList.contains('k-fail') ? 'idle' : 'pending');
+    n.classList.remove('done', 'active', 'pending', 'idle', 'hit', 'handled');
+    var oi = ORDER.indexOf(n);
+    if (stage === 'clean') {
+      if (isFail(n)) { n.classList.add('idle'); return; }
+      n.classList.add(oi <= upto ? 'done' : 'pending');
+      if (oi === upto) n.classList.add('active');
+      return;
+    }
+    if (isFail(n) && n !== FAULT) { n.classList.add('idle'); return; }
+    if (n === FAULT) {
+      if (stage === 'hit') n.classList.add('done', 'active', 'hit');
+      else if (oi <= upto) n.classList.add('done', 'handled');
+      else n.classList.add('pending');
+      return;
+    }
+    n.classList.add(oi <= upto ? 'done' : 'pending');
+    if (oi === upto) n.classList.add('active');
   });
+}
+
+function runFlow(withFault){
+  clearTimeout(runTimer);
+  var faultAt = (withFault && FAULT) ? ORDER.indexOf(FAULT) : -1;
   var i = 0;
   (function tick(){
-    if (i >= STEPS.length) {
-      STEPS.forEach(function(n){
-        n.classList.remove('pending', 'active');
-        n.classList.add('done');
-      });
-      if (!document.body.classList.contains('broken')) {
-        hint.textContent = 'That run completed. The dashed tiles are the paths '
-          + 'it did not need — press Break it and they light up.';
+    if (i >= ORDER.length) {
+      pose(withFault ? 'ran' : 'clean', ORDER.length - 1);
+      if (document.body.classList.contains('broken')) return;
+      if (faultAt >= 0) {
+        say('Handled · run completed', 'ok');
+        hintEl.textContent = 'That pass hit a failure on purpose. It was held, '
+          + 'somebody was told, and the work still finished.';
+      } else {
+        say('Run completed', 'ok');
+        hintEl.textContent = 'A clean pass. The dashed tiles are the paths it '
+          + 'did not need — press Break it and they all light up.';
       }
       return;
     }
-    if (i > 0) STEPS[i - 1].classList.remove('active');
-    STEPS[i].classList.remove('pending');
-    STEPS[i].classList.add('active', 'done');
+    if (!withFault && isFail(ORDER[i])) { i++; return tick(); }
+    var n = ORDER[i];
+    if (i === faultAt) {
+      pose('hit', i);
+      say('Step ' + num(n) + ' failed — held, someone told', 'bad');
+      runTimer = setTimeout(function(){
+        pose('ran', i);
+        say('Step ' + num(n) + ' handled — carrying on', null);
+        i++;
+        runTimer = setTimeout(tick, 620);
+      }, 1250);
+      return;
+    }
+    pose(withFault ? 'ran' : 'clean', i);
+    say('Running · step ' + num(n), null);
     i++;
-    runTimer = setTimeout(tick, 380);
+    runTimer = setTimeout(tick, 400);
   })();
 }
-runFlow();
-document.getElementById('run').addEventListener('click', runFlow);
+runFlow(true);
+document.getElementById('run').addEventListener('click', function(){
+  runFlow(false);
+});
 
 var j = document.getElementById('journey');
 DATA.journey.forEach(function(s, i){
@@ -443,12 +616,27 @@ DATA.metrics.forEach(function(m){
 var btn = document.getElementById('brk');
 var hint = document.getElementById('hint');
 btn.addEventListener('click', function(){
+  // Stop whatever the run is doing first. Without this, a click landing mid-run
+  // leaves the next tick to overwrite the state the reader just asked for, and
+  // the button looks like it did nothing.
+  clearTimeout(runTimer);
   var broken = document.body.classList.toggle('broken');
   btn.setAttribute('aria-pressed', String(broken));
   btn.textContent = broken ? 'Put it back' : 'Break it';
+  NODES.forEach(function(n){
+    n.classList.remove('pending', 'active', 'hit', 'handled', 'idle');
+    // Broken shows every route at once, including the ones a normal run skips,
+    // so nothing here is dimmed by run state.
+    if (broken) n.classList.add('done');
+  });
+  // Restored puts the canvas back to a completed clean pass rather than replaying
+  // it — the button's job is to undo itself, not to start something new.
+  if (!broken) pose('clean', ORDER.length - 1);
+  say(broken ? 'Break it — every failure path lit' : 'Run completed',
+      broken ? 'bad' : 'ok');
   hint.textContent = broken
     ? 'Lit in red: every path the system takes when something goes wrong. None of them are silent.'
-    : 'Currently showing the happy path.';
+    : 'Back to a completed run. Press Run it again to watch it execute.';
 });
 </script>
 </body>
